@@ -8,15 +8,15 @@ If the table is already created in the database, you can skip this step.
 
 Otherwise, [follow this recipe to design and create the SQL schema for your table](./single_table_design_recipe_template.md).
 
-*In this template, we'll use an example table `students`*
+*In this template, we'll use an example table `albums`*
 
 ```
 # EXAMPLE
 
-Table: students
+Table: albums
 
 Columns:
-id | name | cohort_name
+id | title | release_year | artist_id
 ```
 
 ## 2. Create Test SQL seeds
@@ -35,13 +35,13 @@ If seed data is provided (or you already created it), you can skip this step.
 -- so we can start with a fresh state.
 -- (RESTART IDENTITY resets the primary key)
 
-TRUNCATE TABLE students RESTART IDENTITY; -- replace with your own table name.
+TRUNCATE TABLE albums RESTART IDENTITY; -- replace with your own table name.
 
 -- Below this line there should only be `INSERT` statements.
 -- Replace these statements with your own seed data.
 
-INSERT INTO students (name, cohort_name) VALUES ('David', 'April 2022');
-INSERT INTO students (name, cohort_name) VALUES ('Anna', 'May 2022');
+INSERT INTO albums (title, release_year, artist_id) VALUES ('Doolittle', '1989', '1');
+INSERT INTO albums (title, release_year, artist_id) VALUES ('Waterloo', '1974', '2');
 ```
 
 Run this SQL file on the database to truncate (empty) the table, and insert the seed data. Be mindful of the fact any existing records in the table will be deleted.
@@ -56,16 +56,16 @@ Usually, the Model class name will be the capitalised table name (single instead
 
 ```ruby
 # EXAMPLE
-# Table name: students
+# Table name: albums
 
 # Model class
-# (in lib/student.rb)
-class Student
+# (in lib/album.rb)
+class Album
 end
 
 # Repository class
-# (in lib/student_repository.rb)
-class StudentRepository
+# (in lib/album_repository.rb)
+class AlbumRepository
 end
 ```
 
@@ -75,15 +75,15 @@ Define the attributes of your Model class. You can usually map the table columns
 
 ```ruby
 # EXAMPLE
-# Table name: students
+# Table name: albums
 
 # Model class
 # (in lib/student.rb)
 
-class Student
+class Album
 
   # Replace the attributes by your own columns.
-  attr_accessor :id, :name, :cohort_name
+  attr_accessor :id, :title, :artist_id
 end
 
 # The keyword attr_accessor is a special Ruby feature
@@ -105,18 +105,18 @@ Using comments, define the method signatures (arguments and return value) and wh
 
 ```ruby
 # EXAMPLE
-# Table name: students
+# Table name: albums
 
 # Repository class
 # (in lib/student_repository.rb)
 
-class StudentRepository
+class AlbumRepository
 
   # Selecting all records
   # No arguments
   def all
     # Executes the SQL query:
-    # SELECT id, name, cohort_name FROM students;
+    # SELECT id, name, cohort_name FROM albums;
 
     # Returns an array of Student objects.
   end
@@ -125,7 +125,7 @@ class StudentRepository
   # One argument: the id (number)
   def find(id)
     # Executes the SQL query:
-    # SELECT id, name, cohort_name FROM students WHERE id = $1;
+    # SELECT id, name, cohort_name FROM albums WHERE id = $1;
 
     # Returns a single Student object.
   end
@@ -153,21 +153,21 @@ These examples will later be encoded as RSpec tests.
 # EXAMPLES
 
 # 1
-# Get all students
+# Get all albums
 
 repo = StudentRepository.new
 
-students = repo.all
+albums = repo.all
 
-students.length # =>  2
+albums.length # =>  2
 
-students[0].id # =>  1
-students[0].name # =>  'David'
-students[0].cohort_name # =>  'April 2022'
+albums[0].id # =>  1
+albums[0].name # =>  'David'
+albums[0].cohort_name # =>  'April 2022'
 
-students[1].id # =>  2
-students[1].name # =>  'Anna'
-students[1].cohort_name # =>  'May 2022'
+albums[1].id # =>  2
+albums[1].name # =>  'Anna'
+albums[1].cohort_name # =>  'May 2022'
 
 # 2
 # Get a single student
@@ -196,18 +196,27 @@ This is so you get a fresh table contents every time you run the test suite.
 
 # file: spec/student_repository_spec.rb
 
-def reset_students_table
-  seed_sql = File.read('spec/seeds_students.sql')
-  connection = PG.connect({ host: '127.0.0.1', dbname: 'students' })
+def reset_albums_table
+  seed_sql = File.read('spec/seeds_albums.sql')
+  connection = PG.connect({ host: '127.0.0.1', dbname: 'albums' })
   connection.exec(seed_sql)
 end
 
-describe StudentRepository do
+describe AlbumRepository do
   before(:each) do 
-    reset_students_table
+    reset_albums_table
   end
 
   # (your tests will go here).
+
+
+repo = AlbumRepository.new
+
+albums = repo.all
+albums.length # => 2
+albums.first.id # => '1'
+albums.first.name # => 'Doolittle'
+
 end
 ```
 
