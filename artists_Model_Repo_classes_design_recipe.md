@@ -78,7 +78,7 @@ Define the attributes of your Model class. You can usually map the table columns
 # Table name: artists
 
 # Model class
-# (in lib/student.rb)
+# (in lib/artist.rb)
 
 class Artist
 
@@ -90,7 +90,7 @@ end
 # which allows us to set and get attributes on an object,
 # here's an example:
 #
-# student = Student.new
+# artist = Artist.new
 # student.name = 'Jo'
 # student.name
 ```
@@ -119,6 +119,14 @@ class ArtistRepository
     # SELECT id, name, genre FROM artists;
 
     # Returns an array of artist objects.
+  end
+
+  # select a single record
+  # Given the ID in argument (a number)
+  def find(id)
+  # executes the SQL QUERY:
+  # SELECT id, name, genre FROM artists WHERE id = $1;
+  # returns a single Artist object
   end
 
  
@@ -151,15 +159,26 @@ artists[1].name # =>  'Anna'
 artists[1].genre # =>  'May 2022'
 
 # 2
-# Get a single student
+# Get a single artist
 
-repo = StudentRepository.new
+repo = ArtistRepository.new
 
-student = repo.find(1)
+artist = repo.find(1)
 
-student.id # =>  1
-student.name # =>  'David'
-student.genre # =>  'April 2022'
+artist.id # =>  1
+artist.name # =>  'Pixies'
+artist.genre # =>  'Rock'
+
+# 3
+# Get a another artist
+
+repo = ArtistRepository.new
+
+artist = repo.find(2)
+
+artist.id # =>  2
+artist.name # =>  'ABBA'
+artist.genre # =>  'Pop'
 
 # Add more examples for each method
 ```
