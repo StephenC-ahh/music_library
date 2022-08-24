@@ -19,12 +19,22 @@ DatabaseConnection.connect('music_library')
 artist_repository = ArtistRepository.new
 album_repository = AlbumRepository.new
 
+
+
+# returns all from artists table in music_library db
 artist_repository.all.each do |artist|
     p artist
 
 end
-
-
+# returns all from albums table in music library db
 album_repository.all.each do |album|
   p album
 end
+
+artist = artist_repository.find(1)
+puts "The first artist is: #{artist.name}"
+puts "The genre of the artist: #{artist.name} is #{artist.genre}"
+
+album = album_repository.find(1)
+puts album.title 
+ 
