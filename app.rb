@@ -30,11 +30,27 @@ end
 album_repository.all.each do |album|
   p album
 end
-
+# returns a single artist from the music library
 artist = artist_repository.find(1)
 puts "The first artist is: #{artist.name}"
 puts "The genre of the artist: #{artist.name} is #{artist.genre}"
-
+# returns a single album from the music library
 album = album_repository.find(1)
 puts album.title 
- 
+
+# creates a new record in artists table
+# artist = Artist.new
+# artist.name = 'Van Halen'
+# artist.genre = 'Heavy Metal'
+# artist_repository.create(artist) #INSERT into artists
+
+
+# DELETES
+# artist_repository.delete(11) # DELETE FROM artists WHERE id =
+
+
+# # update
+# artist = repo.find(1)
+# artist.name = 'Whatever'
+
+# artist_repository.update(artist) #UPDATE artists...WHERE id = 

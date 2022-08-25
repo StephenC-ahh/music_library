@@ -129,6 +129,30 @@ class ArtistRepository
   # returns a single Artist object
   end
 
+# Insert a new artist record
+# Takes an Artist object in argument
+  def create(artist)
+    #executes the SQL query
+    #INSERT INTO artists (name, genre) VALUES($1, $2)
+    #Doesn't need to return anything
+  end
+
+# Deletes an artists record
+# given its id
+  def delete(id)
+    #executes the SQL query
+    #DELETE FROM artists WHERE id = $1
+    #Returns nothing
+  end
+
+  # Updates an artist record
+  # takes an artists object(with updated fields)
+  def update(artist)
+    #Executes the SQL:
+    # UPDATE artists SET name = $1, genre = $2 WHERE id = $3
+
+    # Returns nothing(only updates the record )
+  end
  
 ```
 
@@ -179,6 +203,43 @@ artist = repo.find(2)
 artist.id # =>  2
 artist.name # =>  'ABBA'
 artist.genre # =>  'Pop'
+
+# 4
+# Create a new artist
+repo = ArtistRepository.new
+artist = Artist.new
+artist.name = 'Beatles'
+artist.genre = 'Pop'
+
+repo.create(artist) # => nil
+artists = repo.all
+artists.last.name # => 'Beatles'
+artists.last.genre # => 'Pop' 
+
+# 5
+# Deletes an artist
+repo = ArtistRepository.new
+
+id_to_delete = 1
+
+repo.delete(id_to_delete)
+
+artists = repo.all
+artists.length # => 1
+artists.first.id # => 2
+
+# 6
+# updates an artist
+repo = ArtistRepository.new
+
+artist = repo.find(1)
+
+artist.name = 'Something else'
+artist.genre = 'Disco'
+repo.update(artist)
+updated_artist = repo.find(1)
+updated_artist.name # => 'Something else'
+updated_artist.genre # => 'Disco'
 
 # Add more examples for each method
 ```
