@@ -21,6 +21,18 @@ class Application
         @io.puts "What would you like to do?\n"
         @io.puts "1 - List all albums\n2 - List all artists"
         result = @io.gets.chomp
-        
+        fail "number must be 1 or 2" unless result [/1|2/]
+        if result == '1'
+            return @album_repository.all.each do |album|
+                puts "* " + album.id + " - " + album.title
+            end
+        else
+            return @artist_repository.all.each do |artist|
+            puts puts "* " + artist.id + " - " + artist.name
+            end
+        end
     end
 end
+
+application = Application.new('music_library_test',Kernel,AlbumRepository.new, ArtistRepository.new)
+application.run

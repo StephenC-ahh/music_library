@@ -32,12 +32,11 @@ RSpec.describe Application do
     it "tests the input when inputting 1" do
         io = double :io
         
-        expect(io).to receive(:puts).with("Welcome to the music library manager!\n\n")
-        expect(io).to receive(:puts).with("What would you like to do?\n")
-        expect(io).to receive(:puts).with("1 - List all albums\n2 - List all artists")
+        expect(io).to receive(:puts).with("Welcome to the music library manager!\n\n").ordered
+        expect(io).to receive(:puts).with("What would you like to do?\n").ordered
+        expect(io).to receive(:puts).with("1 - List all albums\n2 - List all artists").ordered
         expect(io).to receive(:gets).and_return("1")
-        
-
+        expect(io).to receive(:puts).with("Doolittle")
         application = Application.new('music_library_test',io,AlbumRepository.new, ArtistRepository.new)
         database_name = DatabaseConnection.connect('music_library_test')
         album_repository = AlbumRepository.new
